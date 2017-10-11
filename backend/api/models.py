@@ -21,10 +21,6 @@ class Customer(models.Model):
 
 class Book(models.Model):
     cover = models.ImageField(upload_to = 'static/images')
-    # cover = models.ImageField(upload_to = 'images', default='images/no_image.gif')
-    # def image_tag(self):
-    #     return mark_safe( '<img src="images/%s" width="132 height="200" />' % (self.cover) )
-    # image_tag.short_description = "Image"
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=200)
     price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -39,11 +35,15 @@ class Book(models.Model):
     def __str__(self):
         return "%s - %s" % (self.title, self.price)
 
+    def get_absolute_url(self):
+        return reverse('api:book_detail', args=[self.id])
 
-class Cart(models.Model):
-    uid = models.ForeignKey(User)
-    pid = models.ForeignKey(Book)
-    no_item = models.IntegerField()
+
+
+# class Cart(models.Model):
+#     uid = models.ForeignKey(User)
+#     pid = models.ForeignKey(Book)
+#     no_item = models.IntegerField()
 
 
 

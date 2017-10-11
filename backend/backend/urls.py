@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^', include('api.urls', namespace='api'))
 ]
 
 if settings.DEBUG is True:
