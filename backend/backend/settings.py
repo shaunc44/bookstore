@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+CART_SESSION_ID = 'cart'
 
 
 

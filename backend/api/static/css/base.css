@@ -184,7 +184,7 @@ ul.errorlist {
     overflow:hidden;
 }
 
-.product-list .item {
+.book-list .item {
     width:25%;
     padding:10px 20px 10px 0;
     float:left;
@@ -192,32 +192,32 @@ ul.errorlist {
     line-height:1.2;
 }
 
-.product-list .item img {
+.book-list .item img {
     width:100%;
     margin-bottom:8px;
 }
 
-.product-detail {
+.book-detail {
     text-align:justify;
 }
 
-.product-detail .price {
+.book-detail .price {
     color:#333;
     font-size:28px;
     font-weight:bold;
 }
 
-.product-detail img {
+.book-detail img {
     width:40%;
     float:left;
     padding:0 20px 20px 0;
 }
 
-.product-detail h1 {
+.book-detail h1 {
     margin-bottom:0;
 }
 
-.product-detail h2 {
+.book-detail h2 {
     margin-top:10px;
 }
 
