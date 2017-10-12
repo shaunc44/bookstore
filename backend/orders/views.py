@@ -13,7 +13,7 @@ def order_create(request):
             order = form.save()
             for item in cart:
                 OrderItem.objects.create(order      = order,
-                                         book    = item['book'],
+                                         book       = item['book'],
                                          price      = item['price'],
                                          quantity   = item['quantity'])
             # clear the cart
@@ -21,11 +21,11 @@ def order_create(request):
             # launch asynchronous task
             # order_created.delay(order.id)
             return render(request, 
-                         'orders/order/created.html', 
+                         'orders/created.html', 
                          {'order': order})
     else:
         form = OrderCreateForm()
 
     return render(request, 
-                  'orders/order/create.html', 
+                  'orders/create.html', 
                   {'cart': cart, 'form': form})
