@@ -9,9 +9,7 @@ def book_list(request):
     books = Book.objects.filter()
     return render(request, 
                   'api/book/list.html', 
-                 {
-                  'books': books
-                 })
+                 {'books': books})
 
 
 def book_detail(request, id):
@@ -19,7 +17,5 @@ def book_detail(request, id):
     cart_book_form = CartAddBookForm()
     return render(request, 
                   'api/book/detail.html',
-                 {
-                  'book': book,
-                  'cart_book_form': cart_book_form
-                 })
+                 {'book': book,
+                  'cart_book_form': cart_book_form})

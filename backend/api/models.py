@@ -34,7 +34,7 @@ class Book(models.Model):
         db_table = 'book'
 
     def __str__(self):
-        return "%s - %s" % (self.title, self.price)
+        return "%s" % (self.title,)
 
     def get_absolute_url(self):
         return reverse('api:book_detail', args=[self.id])

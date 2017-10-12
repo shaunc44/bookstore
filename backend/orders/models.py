@@ -1,4 +1,6 @@
 from django.db import models
+# from django.utils import timezone
+
 from api.models import Book
 
 
@@ -10,9 +12,12 @@ class Order(models.Model):
     postal_code =   models.CharField(max_length=20)
     city =          models.CharField(max_length=50)
     state =         models.CharField(max_length=50)
+    # created_at =       models.DateTimeField(default=timezone.now)
     created =       models.DateTimeField(auto_now_add=True)
     updated =       models.DateTimeField(auto_now=True)
     paid =          models.BooleanField(default=False)
+    # book =          models.ForeignKey(Book, default=7)
+    # # item =          models.ForeignKey(OrderItem, default=1)
 
     class Meta:
         ordering = ('-created',)
