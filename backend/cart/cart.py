@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django.conf import settings
-from api.models import Book
+from orders.models import Book
 
 
 

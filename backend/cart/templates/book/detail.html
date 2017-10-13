@@ -1,17 +1,17 @@
-<!-- {% extends "api/base.html" %}
+{% extends "cart/base.html" %}
 {% load static %}
 
 {% block title %}
-    Books -->
+    Books
     <!-- {{ book.title }} -->
-<!-- {% endblock %}
+{% endblock %}
 
 {% block content %}
     <div class="book-detail">
         <img src="{% if book.cover %}{{ book.cover.url }}{% else %}{% static "img/no_image.gif" %}{% endif %}">
-        <h1>{{ book.title }}</h1> -->
+        <h1>{{ book.title }}</h1>
         <!-- <h2><a href="{{ book.category.get_absolute_url }}">{{ book.category }}</a></h2> -->
-    <!--     <p class="price">${{ book.price }}</p>
+        <p class="price">${{ book.price }}</p>
         <form action="{% url "cart:cart_add" book.id %}" method="post">
             {{ cart_book_form }}
             {% csrf_token %}
@@ -19,4 +19,4 @@
         </form>
         {{ book.description|linebreaks }}
     </div>
-{% endblock %} -->
+{% endblock %}

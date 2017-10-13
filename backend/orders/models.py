@@ -1,7 +1,33 @@
-from django.db import models
-# from django.utils import timezone
+from __future__ import unicode_literals
 
-from api.models import Book
+# from django.utils import timezone
+from django.db import models
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
+# from models import Book
+from PIL import Image
+
+
+
+class Book(models.Model):
+    cover = models.ImageField(upload_to = 'static/images')
+    title = models.CharField(max_length=50)
+    description = models.TextField(max_length=200)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    isbn_13 = models.CharField(max_length=13)
+    author_first_name = models.CharField(max_length=20)
+    author_last_name = models.CharField(max_length=20)
+    # customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        db_table = 'book'
+
+    def __str__(self):
+        return "%s" % (self.title,)
+
+    def get_absolute_url(self):
+        return reverse('book:book_detail', args=[self.id])
+
 
 
 class Order(models.Model):
@@ -12,12 +38,12 @@ class Order(models.Model):
     postal_code =   models.CharField(max_length=20)
     city =          models.CharField(max_length=50)
     state =         models.CharField(max_length=50)
-    # created_at =       models.DateTimeField(default=timezone.now)
+    # created_at =    models.DateTimeField(default=timezone.now)
     created =       models.DateTimeField(auto_now_add=True)
     updated =       models.DateTimeField(auto_now=True)
     paid =          models.BooleanField(default=False)
     # book =          models.ForeignKey(Book, default=7)
-    # # item =          models.ForeignKey(OrderItem, default=1)
+    # item =          models.ForeignKey(OrderItem, default=1)
 
     class Meta:
         ordering = ('-created',)

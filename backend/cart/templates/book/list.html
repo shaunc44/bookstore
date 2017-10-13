@@ -1,12 +1,12 @@
-<!-- {% extends "api/base.html" %}
+{% extends "cart/base.html" %}
 {% load static %}
 
 {% block title %}
-    Sci-Fi Books -->
+    Sci-Fi Books
     <!-- {% if category %}{{ category.name }}{% else %}Books{% endif %} -->
-<!-- {% endblock %}
+{% endblock %}
 
-{% block content %} -->
+{% block content %}
 <!--     <div id="sidebar">
         <h3>Categories</h3>
         <ul>
@@ -20,9 +20,9 @@
         {% endfor %}
         </ul>
     </div> -->
-    <!-- <div id="main" class="book-list"> -->
+    <div id="main" class="book-list">
         <!-- <h1>{% if category %}{{ category.name }}{% else %}Books{% endif %}</h1> -->
-  <!--       <h1>Sci-Fi Books</h1>
+        <h1>Sci-Fi Books</h1>
         {% for book in books %}
             <div class="item">
                 <a href="{{ book.get_absolute_url }}">
@@ -33,4 +33,4 @@
             </div>
         {% endfor %}
     </div>
-{% endblock %} -->
+{% endblock %}

@@ -14,17 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf import settings
-from django.conf.urls.static import static
+
 
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^cart/', include('cart.urls', namespace='cart')),
-    url(r'^orders/', include('orders.urls', namespace='orders')),
-    url(r'^', include('api.urls', namespace='api')),
+    url(r'', include('cart.urls', namespace='cart')),
+    # url(r'^orders/', include('orders.urls', namespace='orders')),
+    # url(r'^', include('api.urls', namespace='api')),
 ]
 
 # In production never serve static files with Django ******
