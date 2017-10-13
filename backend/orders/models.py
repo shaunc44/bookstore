@@ -17,16 +17,12 @@ class Book(models.Model):
     isbn_13 = models.CharField(max_length=13)
     author_first_name = models.CharField(max_length=20)
     author_last_name = models.CharField(max_length=20)
-    # customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
-
-    class Meta:
-        db_table = 'book'
 
     def __str__(self):
         return "%s" % (self.title,)
 
     def get_absolute_url(self):
-        return reverse('book:book_detail', args=[self.id])
+        return reverse('cart:book_detail', args=[self.id])
 
 
 
@@ -42,8 +38,7 @@ class Order(models.Model):
     created =       models.DateTimeField(auto_now_add=True)
     updated =       models.DateTimeField(auto_now=True)
     paid =          models.BooleanField(default=False)
-    # book =          models.ForeignKey(Book, default=7)
-    # item =          models.ForeignKey(OrderItem, default=1)
+    customer =      models.ForeignKey(User)
 
     class Meta:
         ordering = ('-created',)
@@ -57,7 +52,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order =     models.ForeignKey(Order, related_name='items')
-    book =      models.ForeignKey(Book, related_name='order_items')
+    book =     models.ForeignKey(Book, related_name='order_items')
     price =     models.DecimalField(max_digits=10, decimal_places=2)
     quantity =  models.PositiveIntegerField(default=1)
 

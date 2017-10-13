@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-# from orders.models import Book
 from .cart import Cart
 from .forms import CartAddBookForm
 from orders.models import Book, OrderItem
@@ -11,6 +10,7 @@ from orders.forms import OrderCreateForm
 # Old API views
 def book_list(request):
     books = Book.objects.filter()
+
     return render(request, 
                   'book/list.html', 
                  {'books': books})
@@ -30,6 +30,7 @@ def book_detail(request, id):
 def cart_add(request, book_id):
     cart = Cart(request)
     book = get_object_or_404(Book, id=book_id)
+    print ("Book=", book)
     form = CartAddBookForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
@@ -52,10 +53,12 @@ def cart_detail(request):
         item['update_quantity_form'] = CartAddBookForm(
             initial={
                 'quantity': item['quantity'],
-                'update': True
+                'update':   True
             }
         )
-    return render(request, 'cart/detail.html', {'cart': cart})
+    return render(request, 
+                  'cart/detail.html', 
+                  {'cart': cart})
 
 
 # Old Orders views
@@ -67,7 +70,7 @@ def order_create(request):
             order = form.save()
             for item in cart:
                 OrderItem.objects.create(order =    order,
-                                         book =     item['book'],
+                                         book =     item['book1'],
                                          price =    item['price'],
                                          quantity = item['quantity'])
             # clear the cart
