@@ -1,5 +1,14 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
+# from django.conf.urls import patterns
 from . import views
+from rest_framework.routers import DefaultRouter
+from rest_framework.schemas import get_schema_view
+
+
+# router = DefaultRouter()
+# router.register(r'snippets', views.BookViewSet)
+# router.register(r'users', views.UserViewSet)
+
 
 
 app_name = 'cart'

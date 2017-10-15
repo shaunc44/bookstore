@@ -1,28 +1,45 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_POST
+# from django.shortcuts import render, redirect, get_object_or_404
+# from django.views.decorators.http import require_POST
 from .cart import Cart
 from .forms import CartAddBookForm
-from orders.models import Book, OrderItem
+from orders.models import Book, Order, OrderItem
 from orders.forms import OrderCreateForm
 
-
-# Create your views here.
-# Old API views
-def book_list(request):
-    books = Book.objects.filter()
-
-    return render(request, 
-                  'book/list.html', 
-                 {'books': books})
+from cart.serializers import BookSerializer, UserSerializer, OrderSerializer, OrderItemSerializer
+from cart.permissions import IsOwnerOrReadOnly
+from rest_framework import permissions, renderers, viewsets
+from rest_framework.decorators import api_view, detail_route
+from rest_framework.response import Response
+# from rest_framework.reverse import reverse
+from django.contrib.auth.models import User
 
 
-def book_detail(request, id):
-    book = get_object_or_404(Book, id=id)
-    cart_book_form = CartAddBookForm()
-    return render(request, 
-                  'book/detail.html',
-                 {'book': book,
-                  'cart_book_form': cart_book_form})
+
+
+
+class BookViewSet(viewsets.ModelViewSet):
+
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    #                       IsOwnerOrReadOnly,)
+
+    @detail_route(renderer_classes=[renderers.StaticHTMLRenderer])
+    def book_list(request):
+        books = Book.objects.filter()
+
+        return render(request, 
+                      'book/list.html', 
+                     {'books': books})
+
+
+    def book_detail(request, id):
+        book = get_object_or_404(Book, id=id)
+        cart_book_form = CartAddBookForm()
+        return render(request, 
+                      'book/detail.html',
+                     {'book': book,
+                      'cart_book_form': cart_book_form})
 
 
 # Cart Views
@@ -88,4 +105,10 @@ def order_create(request):
                   {'cart': cart, 'form': form})
 
 
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    This viewset automatically provides `list` and `detail` actions.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 

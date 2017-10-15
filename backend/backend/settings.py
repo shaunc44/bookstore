@@ -42,11 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'api',
     'cart',
     'orders',
-    # 'api',
 ]
+
+# THIRD_PARTY_APPS = [
+#     'rest_framework',
+# ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
