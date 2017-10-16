@@ -16,15 +16,14 @@ from os.path import abspath, basename, dirname, join, normpath
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# comment out BASE_DIR
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DJANGO_ROOT = dirname(dirname(abspath(__file__)))
 SITE_ROOT = dirname(DJANGO_ROOT)
 SITE_NAME = basename(DJANGO_ROOT)
 
 
 # MEDIA_ROOT = os.path.join(CURRENT_PATH, 'media').replace('\\','/')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(DJANGO_ROOT, 'media/')
 MEDIA_URL = '/media/'
 
 # Quick-start development settings - unsuitable for production
@@ -161,30 +160,32 @@ PIPELINE_COMPILERS = (
     'pipeline_browserify.compiler.BrowserifyCompiler',
 )
 
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.NoopCompressor'  
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.NoopCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 
-if DEBUG:  
+if DEBUG:
     PIPELINE_BROWSERIFY_ARGUMENTS = '-t babelify'
 
-PIPELINE_CSS = {  
-    'mysite_css': {
+PIPELINE_CSS = {
+    'bookstore_css': {
         'source_filenames': (
-            'css/style.css',
+            # 'css/style.css',
+            'cart/static/css/base.css',
+            'bookstore/static/css/base.css'
         ),
-        'output_filename': 'css/mysite_css.css',
+        'output_filename': 'frontend/static/css/bookstore_css.css',
     },
 }
 
-PIPELINE_JS = {  
-    'mysite_js': {
+PIPELINE_JS = {
+    'bookstore_js': {
         'source_filenames': (
-            'js/bower_components/jquery/dist/jquery.min.js',
-            'js/bower_components/react/JSXTransformer.js',
-            'js/bower_components/react/react-with-addons.js',
-            'js/app.browserify.js',
+            'frontend/static/js/bower_components/jquery/dist/jquery.min.js',
+            'frontend/static/js/bower_components/react/JSXTransformer.js',
+            'frontend/static/js/bower_components/react/react-with-addons.js',
+            'frontend/static/js/app.browserify.js',
         ),
-        'output_filename': 'js/mysite_js.js',
+        'output_filename': 'frontend/static/js/bookstore_js.js',
     }
 }
 
