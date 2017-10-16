@@ -12,10 +12,16 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from . settings_secret import Secret as sec
+from os.path import abspath, basename, dirname, join, normpath
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# comment out BASE_DIR
+DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+SITE_ROOT = dirname(DJANGO_ROOT)
+SITE_NAME = basename(DJANGO_ROOT)
+
 
 # MEDIA_ROOT = os.path.join(CURRENT_PATH, 'media').replace('\\','/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
@@ -42,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pipeline',
     'rest_framework',
     'api',
     'cart',
@@ -67,7 +74,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'], # should this be frontend/templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,9 +140,53 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = normpath(join(SITE_ROOT, 'static'))
+
+STATICFILES_DIRS = ()
+
 CART_SESSION_ID = 'cart'
 
 
+# Django Pipeline (and browserify)
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
+)
+
+# browserify-specific
+PIPELINE_COMPILERS = (
+    'pipeline_browserify.compiler.BrowserifyCompiler',
+)
+
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.NoopCompressor'  
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
+
+if DEBUG:  
+    PIPELINE_BROWSERIFY_ARGUMENTS = '-t babelify'
+
+PIPELINE_CSS = {  
+    'mysite_css': {
+        'source_filenames': (
+            'css/style.css',
+        ),
+        'output_filename': 'css/mysite_css.css',
+    },
+}
+
+PIPELINE_JS = {  
+    'mysite_js': {
+        'source_filenames': (
+            'js/bower_components/jquery/dist/jquery.min.js',
+            'js/bower_components/react/JSXTransformer.js',
+            'js/bower_components/react/react-with-addons.js',
+            'js/app.browserify.js',
+        ),
+        'output_filename': 'js/mysite_js.js',
+    }
+}
 
 
 

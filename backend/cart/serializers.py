@@ -12,7 +12,6 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'cover', 'title', 
                   'description', 'price', 'isbn_13', 
                   'author_first_name', 'author_last_name')
-        # view_name = 'book-detail'
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,7 +25,6 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'owner', 'first_name', 'last_name', 'email', 
                   'address', 'postal_code', 'city', 'state', 
                   'created', 'updated', 'paid', 'customer', 'items')
-        # view_name = 'order-detail'
 
 
 class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -38,14 +36,11 @@ class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
         model = OrderItem
         # add owner to fields, uncomment owner variable above
         fields = ('url', 'id', 'owner', 'order', 'book', 'price', 'quantity')
-        # view_name = 'orderitem-detail'
-        # view_name = 'order-detail'
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     # order_set = serializers.HyperlinkedRelatedField(many=True, view_name='order-detail', read_only=True)
     # orderitem_set = orderitem_set.order
-    # print (orderitem_set)
 
     class Meta:
         model = User
