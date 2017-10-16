@@ -23,7 +23,7 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('cart.urls', namespace='cart')),
+    url(r'', include('cart.urls')),
     # url(r'^orders/', include('orders.urls', namespace='orders')),
     # url(r'^', include('api.urls', namespace='api')),
 ]

@@ -18,36 +18,38 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username') # how to link owner????
     # books = serializers.HyperlinkedIdentityField(view_name='book-detail', format='html')
+    items = serializers.HyperlinkedRelatedField(many=True, view_name='orderitem-list', read_only=True) 
 
     class Meta:
         model = Order
         # add owner to fields, uncomment owner variable above
         fields = ('url', 'id', 'owner', 'first_name', 'last_name', 'email', 
                   'address', 'postal_code', 'city', 'state', 
-                  'created', 'update', 'paid', 'customer')
+                  'created', 'updated', 'paid', 'customer', 'items')
         # view_name = 'order-detail'
 
 
 class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
-    # owner = serializers.ReadOnlyField(source='owner.username')
+    owner = serializers.ReadOnlyField(source='owner.username')
     # books = serializers.HyperlinkedIdentityField(view_name='book-detail', format='html')
     # these get passed into field
 
     class Meta:
         model = OrderItem
         # add owner to fields, uncomment owner variable above
-        fields = ('url', 'id', 'order', 'book', 'price', 'quantity')
+        fields = ('url', 'id', 'owner', 'order', 'book', 'price', 'quantity')
         # view_name = 'orderitem-detail'
         # view_name = 'order-detail'
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    # orders = serializers.HyperlinkedRelatedField(many=True, view_name='order-detail', read_only=True)
-    orderitems = serializers.HyperlinkedRelatedField(many=True, view_name='orderitem-detail', read_only=True)
+    # order_set = serializers.HyperlinkedRelatedField(many=True, view_name='order-detail', read_only=True)
+    # orderitem_set = orderitem_set.order
+    # print (orderitem_set)
 
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', 'orderitems') # 'books' ???
+        fields = ('url', 'id', 'username', 'order_set') # 'books' ???
 
 
 
