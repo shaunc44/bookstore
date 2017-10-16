@@ -73,7 +73,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'], # should this be frontend/templates
+        'DIRS': [join(SITE_ROOT, 'frontend/templates')], # should this be frontend/templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(DJANGO_ROOT, 'db.sqlite3'),
     }
 }
 
@@ -141,7 +141,9 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = normpath(join(SITE_ROOT, 'static'))
 
-STATICFILES_DIRS = ()
+STATICFILES_DIRS = [
+    normpath(join(DJANGO_ROOT, "frontend/static"))
+]
 
 CART_SESSION_ID = 'cart'
 
@@ -157,37 +159,57 @@ STATICFILES_FINDERS = (
 
 # browserify-specific
 PIPELINE_COMPILERS = (
+      'pipeline.compilers.es6.ES6Compiler',
     'pipeline_browserify.compiler.BrowserifyCompiler',
 )
 
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.NoopCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 
+
 if DEBUG:
     PIPELINE_BROWSERIFY_ARGUMENTS = '-t babelify'
 
-PIPELINE_CSS = {
-    'bookstore_css': {
-        'source_filenames': (
-            # 'css/style.css',
-            'cart/static/css/base.css',
-            'bookstore/static/css/base.css'
-        ),
-        'output_filename': 'frontend/static/css/bookstore_css.css',
+PIPELINE = {
+    'PIPELINE_ENABLED': True,
+    # 'CSS_COMPRESSOR': 'pipeline.compressors.cssmin.CSSMinCompressor',
+    # 'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
+    # # 'JS_COMPRESSOR': 'pipeline.compressors.slimit.SlimItCompressor',
+    # 'JS_COMPRESSOR': 'pipeline.compressors.uglifyjs.UglifyJSCompressor',
+    # 'CSSMIN': 'cssmin',
+    'STYLESHEETS': {
+        'colors': {
+            'source_filenames': (
+                # 'css/style.css',
+                'css/base.css',
+                '*.css'
+                # 'bookstore/static/admin/css/*.css',
+                # 'bookstore/static/css/base.css',
+                # 'bookstore/static/rest_framework/css/*.css',
+            ),
+            'output_filename': 'css/colors.css'
+        }
     },
-}
-
-PIPELINE_JS = {
-    'bookstore_js': {
-        'source_filenames': (
-            'frontend/static/js/bower_components/jquery/dist/jquery.min.js',
-            'frontend/static/js/bower_components/react/JSXTransformer.js',
-            'frontend/static/js/bower_components/react/react-with-addons.js',
-            'frontend/static/js/app.browserify.js',
-        ),
-        'output_filename': 'frontend/static/js/bookstore_js.js',
+    'JAVASCRIPT': {
+        'stats': {
+            'source_filenames': (
+                'js/bower_components/jquery/dist/jquery.min.js',
+                'js/bower_components/react/JSXTransformer.js',
+                'js/bower_components/react/react-with-addons.js',
+                'js/app.browserify.js',
+                'js/**/*.js'
+            ),
+            'output_filename': 'js/stats.js'
+        }
     }
 }
+
+
+# PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
+# PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.cssmin.CSSMinCompressor'
+# PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
+# PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.slimit.SlimItCompressor'
+
 
 
 

@@ -9,15 +9,17 @@
     <meta name="author" content="Shaun">
 
     <!-- styles -->
-    {% stylesheet 'mysite_css' %}
+    {% stylesheet 'colors' %}
 
   </head>
   <body>
 
-    {% block content %}{% endblock %}
+    {% block content %}
+    <p>This is a sample test paragraph</p>
+    {% endblock %}
 
     <!-- JavaScript scripts -->
 
-    {% javascript 'mysite_js' %}
+    {% javascript 'stats' %}
   </body>
 </html> 

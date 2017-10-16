@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf import settings
+from django.views.generic import TemplateView
 
 
 
@@ -24,6 +25,9 @@ from django.conf import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('cart.urls')),
+    url(r'^index', TemplateView.as_view(
+        template_name='/Users/shauncox/bookstore/backend/frontend/templates/index.html')
+    )
     # url(r'^orders/', include('orders.urls', namespace='orders')),
     # url(r'^', include('api.urls', namespace='api')),
 ]
