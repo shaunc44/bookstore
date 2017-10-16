@@ -2,24 +2,32 @@ from django.conf.urls import url, include
 # from django.conf.urls import patterns
 from . import views
 from rest_framework.routers import DefaultRouter
-from rest_framework.schemas import get_schema_view
+# from rest_framework.schemas import get_schema_view
 
 
-# router = DefaultRouter()
-# router.register(r'snippets', views.BookViewSet)
-# router.register(r'users', views.UserViewSet)
+router = DefaultRouter()
+router.register(r'books', views.BookViewSet)
+router.register(r'orders', views.OrderViewSet)
+router.register(r'orderitems', views.OrderItemViewSet)
+router.register(r'users', views.UserViewSet)
 
-
-
-app_name = 'cart'
+# app_name = 'cart'
 
 urlpatterns = [
-    url(r'^$', views.book_list, name='book_list'),
-    # only works if i change namespace to API
-    url(r'(?P<id>\d+)/$', views.book_detail, name='book_detail'),
-    # only works if i change namespace to API
-    url(r'^cart/$', views.cart_detail, name='cart_detail'), # this works
-    url(r'^add/(?P<book_id>\d+)/$', views.cart_add, name='cart_add'), # does NOT work - API
-    url(r'^remove/(?P<book_id>\d+)/$', views.cart_remove, name='cart_remove'), # does NOT work - API
-    url(r'^create/$', views.order_create, name='order_create'), # this works
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
+
+
+
+
+# urlpatterns = [
+#     url(r'^$', views.book_list, name='book_list'),
+#     # only works if i change namespace to API
+#     url(r'(?P<id>\d+)/$', views.book_detail, name='book_detail'),
+#     # only works if i change namespace to API
+#     url(r'^cart/$', views.cart_detail, name='cart_detail'), # this works
+#     url(r'^add/(?P<book_id>\d+)/$', views.cart_add, name='cart_add'), # does NOT work - API
+#     url(r'^remove/(?P<book_id>\d+)/$', views.cart_remove, name='cart_remove'), # does NOT work - API
+#     url(r'^create/$', views.order_create, name='order_create'), # this works
+# ]
