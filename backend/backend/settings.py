@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pipeline',
+    'pipeline', # used for react
     'rest_framework',
     'api',
     'cart',
@@ -159,7 +159,7 @@ STATICFILES_FINDERS = (
 
 # browserify-specific
 PIPELINE_COMPILERS = (
-      'pipeline.compilers.es6.ES6Compiler',
+    'pipeline.compilers.es6.ES6Compiler',
     'pipeline_browserify.compiler.BrowserifyCompiler',
 )
 

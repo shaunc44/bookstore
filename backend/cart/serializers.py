@@ -17,7 +17,7 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username') # how to link owner????
     # books = serializers.HyperlinkedIdentityField(view_name='book-detail', format='html')
-    items = serializers.HyperlinkedRelatedField(many=True, view_name='orderitem-list', read_only=True) 
+    items = serializers.HyperlinkedRelatedField(many=True, view_name='order-detail', read_only=True) 
 
     class Meta:
         model = Order

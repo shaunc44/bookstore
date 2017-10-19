@@ -10,13 +10,13 @@ from PIL import Image
 
 
 class Book(models.Model):
-    cover = models.ImageField(upload_to = 'static/images')
-    title = models.CharField(max_length=50)
-    description = models.TextField(max_length=200)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    isbn_13 = models.CharField(max_length=13)
+    cover =             models.ImageField(upload_to = 'static/images')
+    title =             models.CharField(max_length=50)
+    description =       models.TextField(max_length=200)
+    price =             models.DecimalField(max_digits=6, decimal_places=2)
+    isbn_13 =           models.CharField(max_length=13)
     author_first_name = models.CharField(max_length=20)
-    author_last_name = models.CharField(max_length=20)
+    author_last_name =  models.CharField(max_length=20)
 
     def __str__(self):
         return "%s" % (self.title,)
