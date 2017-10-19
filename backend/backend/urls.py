@@ -24,10 +24,10 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('cart.urls')),
-    url(r'^index', TemplateView.as_view(
-        template_name='/Users/shauncox/bookstore/backend/frontend/templates/index.html')
-    )
+    url(r'^', include('cart.urls')),
+    # url(r'^index', TemplateView.as_view(
+    #     template_name='/Users/shauncox/bookstore/backend/frontend/templates/index.html')
+    # )
     # url(r'^orders/', include('orders.urls', namespace='orders')),
     # url(r'^', include('api.urls', namespace='api')),
 ]
