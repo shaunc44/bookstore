@@ -1,4 +1,4 @@
-from decimal import Decimal
+# from decimal import Decimal
 from django.conf import settings
 from orders.models import Book
 
@@ -30,7 +30,8 @@ class Cart(object):
             self.cart[str(book.id)]['book'] = book
 
         for item in self.cart.values():
-            item['price'] = Decimal(item['price'])
+            # item['price'] = Decimal(item['price'])
+            item['price'] = float(item['price'])
             item['total_price'] = item['price'] * item['quantity']
             yield item
 
@@ -40,7 +41,7 @@ class Cart(object):
         book_id = str(book.id)
         if book_id not in self.cart:
             self.cart[book_id] = {'quantity': 0,
-                                      'price': str(book.price)}
+                                  'price': str(book.price)}
         if update_quantity:
             self.cart[book_id]['quantity'] = quantity
         else:
@@ -70,7 +71,8 @@ class Cart(object):
 
 
     def get_total_price(self):
-        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+        return sum(float(item['price']) * item['quantity'] for item in self.cart.values())
+        # return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
 
 
 

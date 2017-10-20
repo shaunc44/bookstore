@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
+from django.core import serializers
 from .cart import Cart
 from .forms import CartAddBookForm
 from orders.models import Book, Order, OrderItem
@@ -10,6 +11,7 @@ from cart.serializers import BookSerializer, OrderSerializer, OrderItemSerialize
 from rest_framework import permissions, renderers, viewsets
 from rest_framework.decorators import api_view, detail_route, list_route
 from rest_framework.response import Response
+# from HttpResponse
 from rest_framework.renderers import TemplateHTMLRenderer, StaticHTMLRenderer
 # from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
@@ -37,6 +39,8 @@ class BookDetail(APIView):
 
     def get(self, request, id):
         book = get_object_or_404(Book, id=id)
+        # print ("Book = ", book)
+        # print ("Book Type=", type(book))
         cart_book_form = CartAddBookForm()
         return Response( {'book': book,
                           'cart_book_form': cart_book_form} )
@@ -55,8 +59,13 @@ class CartAdd(APIView):
     def post(self, request, book_id):
         # def cart_add(self, request, book_id):
         cart = Cart(request)
+        # queryset = Book.objects.all()
         book = get_object_or_404(Book, id=book_id)
-        # print ("Book=", book)
+        book = serializers.serialize('python', book)
+        book = [x[0] for x in book]
+        # book = dict(book)
+        # print ("Book = ", book)
+        # print ("Book Type=", type(book))
         form = CartAddBookForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
