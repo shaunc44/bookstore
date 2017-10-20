@@ -19,10 +19,10 @@ urlpatterns = [
     # url(r'^', include(router.urls)),
     url(r'^$', views.BookList.as_view(), name='book_list'),
     url(r'^(?P<id>\d+)/$', views.BookDetail.as_view(), name='book_detail'),
-    url(r'^cart/$', views.CartDetail.as_view(), name='cart_detail'), # this works
-    url(r'^add/(?P<book_id>\d+)/$', views.CartAdd.as_view(), name='cart_add'), # does NOT work - API
-    url(r'^remove/(?P<book_id>\d+)/$', views.CartRemove.as_view(), name='cart_remove'), # does NOT work - API
-    url(r'^create/$', views.OrderCreate.as_view(), name='order_create'), # this works
+    url(r'^cart/$', views.CartDetail.as_view(), name='cart_detail'),
+    url(r'^add/(?P<book_id>\d+)/$', views.CartAdd.as_view(), name='cart_add'),
+    url(r'^remove/(?P<book_id>\d+)/$', views.CartRemove.as_view(), name='cart_remove'),
+    url(r'^create/$', views.OrderCreate.as_view(), name='order_create'), # this does NOT work
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 

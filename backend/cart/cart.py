@@ -32,20 +32,23 @@ class Cart(object):
         for book in books:
             self.cart[str(book.id)]['book'] = create_serializer(book)
 
+        # item['cart_total'] = 0
+
         for item in self.cart.values():
             # item['price'] = Decimal(item['price'])
-            item['price'] = round(float(item['price']),2)
-            item['total_price'] = item['price'] * item['quantity']
+            item['price'] = float(item['price'])
+            item['total_price'] = round(item['price'] * item['quantity'], 2)
+            # item['cart_total'] =+ item['total_price']
             yield item
 
 
     def add(self, book, quantity=1, update_quantity=False):
         # Add a product to the cart or update its quantity.
         book_id = str(book.id)
-        # book_id = book.id
         if book_id not in self.cart:
             self.cart[book_id] = {'quantity': 0,
-                                  'price': str(round(book.price,2))}
+                                  'price': str( round(float(book.price),2) )
+            }
         if update_quantity:
             self.cart[book_id]['quantity'] = quantity
         else:
@@ -75,8 +78,7 @@ class Cart(object):
 
 
     def get_total_price(self):
-        return sum(float(item['price']) * item['quantity'] for item in self.cart.values())
-        # return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+        return round( sum(float(item['price']) * item['quantity'] for item in self.cart.values()), 2 )
 
 
 
