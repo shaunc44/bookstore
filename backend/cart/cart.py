@@ -2,7 +2,7 @@
 from django.conf import settings
 from orders.models import Book
 
-
+from cart.serializers import BookSerializer
 
 class Cart(object):
 
@@ -25,13 +25,16 @@ class Cart(object):
         # Iterate over the items in the cart and get the products from the database.
         book_ids = self.cart.keys()
         # get the book objects and add them to the cart
+        def create_serializer(book):
+            return lambda req: BookSerializer(book, context=dict(request=req)).data
+        
         books = Book.objects.filter(id__in=book_ids)
         for book in books:
-            self.cart[str(book.id)]['book'] = book
+            self.cart[str(book.id)]['book'] = create_serializer(book)
 
         for item in self.cart.values():
             # item['price'] = Decimal(item['price'])
-            item['price'] = float(item['price'])
+            item['price'] = round(float(item['price']),2)
             item['total_price'] = item['price'] * item['quantity']
             yield item
 
@@ -39,9 +42,10 @@ class Cart(object):
     def add(self, book, quantity=1, update_quantity=False):
         # Add a product to the cart or update its quantity.
         book_id = str(book.id)
+        # book_id = book.id
         if book_id not in self.cart:
             self.cart[book_id] = {'quantity': 0,
-                                  'price': str(book.price)}
+                                  'price': str(round(book.price,2))}
         if update_quantity:
             self.cart[book_id]['quantity'] = quantity
         else:

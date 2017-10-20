@@ -4,15 +4,23 @@ from orders.models import Book, Order, OrderItem
 from django.contrib.auth.models import User
 
 
+# Possibly add a CartSerializer
 
 class BookSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Book
+        # fields = ('url', 'cover', 'title', 
+        #           'description', 'price', 'isbn_13', 
+        #           'author_first_name', 'author_last_name')
         fields = ('url', 'id', 'cover', 'title', 
                   'description', 'price', 'isbn_13', 
                   'author_first_name', 'author_last_name')
 
+    url = serializers.HyperlinkedIdentityField(
+        view_name='cart:book_detail',
+        lookup_field='id'
+    )
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username') # how to link owner????

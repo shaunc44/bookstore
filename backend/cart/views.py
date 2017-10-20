@@ -16,6 +16,7 @@ from rest_framework.renderers import TemplateHTMLRenderer, StaticHTMLRenderer
 # from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
+import json
 
 
 # ***************************************************************** #
@@ -39,8 +40,6 @@ class BookDetail(APIView):
 
     def get(self, request, id):
         book = get_object_or_404(Book, id=id)
-        # print ("Book = ", book)
-        # print ("Book Type=", type(book))
         cart_book_form = CartAddBookForm()
         return Response( {'book': book,
                           'cart_book_form': cart_book_form} )
@@ -50,31 +49,56 @@ class BookDetail(APIView):
 #                             CART VIEW                             #
 # ***************************************************************** #
 
-class CartAdd(APIView):
-
+class CartDetail(APIView):
     renderer_classes = (TemplateHTMLRenderer,)
     template_name = 'cart/detail.html'
 
-    # @require_POST
-    def post(self, request, book_id):
-        # def cart_add(self, request, book_id):
+    def get(self, request):
         cart = Cart(request)
-        # queryset = Book.objects.all()
+        print ("Cart: ", dir(cart.cart))
+        print ("Cart: ", cart.cart)
+        for item in cart:
+            # print ("Cart item: ", dir(item))
+            # print ("Cart item: ", item.values)
+            # print ("Quantity:", item['quantity'])
+            item['update_quantity_form'] = CartAddBookForm(
+                initial={
+                    'quantity': item['quantity'],
+                    'update':   True
+                }
+            )
+            # print ("Cart item: ", item)
+        cart_list = list(cart)
+
+        for item in cart_list:
+            item["book"] = item["book"](request)
+        print(cart_list)
+        return Response({'cart': cart_list, "total_price": cart.get_total_price()})
+
+
+class CartAdd(APIView):
+    renderer_classes = (TemplateHTMLRenderer,)
+    template_name = 'cart/detail.html'
+
+    def post(self, request, book_id):
+        cart = Cart(request)
         book = get_object_or_404(Book, id=book_id)
-        book = serializers.serialize('python', book)
-        book = [x[0] for x in book]
-        # book = dict(book)
-        # print ("Book = ", book)
-        # print ("Book Type=", type(book))
         form = CartAddBookForm(request.POST)
+
         if form.is_valid():
             cd = form.cleaned_data
             cart.add(book =             book,
                      quantity =         cd['quantity'],
                      update_quantity =  cd['update'])
-        # return redirect('cart:cart_detail')
-        return Response( {'book': book,
-                          'cart': cart} )
+
+        book = BookSerializer(book, context=dict(request=request))
+        cart_list = list(cart)
+
+        for item in cart_list:
+            item["book"] = item["book"](request)
+
+        return Response( {'book': book.data,
+                          'cart': cart_list } )
 
 
 # @require_POST
@@ -102,21 +126,6 @@ class CartRemove(APIView):
         cart.remove(book)
         return redirect('cart:cart_detail')
 
-
-class CartDetail(APIView):
-    renderer_classes = (TemplateHTMLRenderer,)
-    template_name = 'cart/detail.html'
-
-    def cart_detail(request):
-        cart = Cart(request)
-        for item in cart:
-            item['update_quantity_form'] = CartAddBookForm(
-                initial={
-                    'quantity': item['quantity'],
-                    'update':   True
-                }
-            )
-        return Response({'cart': cart})
 
 
 class OrderCreate(APIView):

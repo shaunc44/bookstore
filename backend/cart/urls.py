@@ -20,7 +20,6 @@ urlpatterns = [
     url(r'^$', views.BookList.as_view(), name='book_list'),
     url(r'^(?P<id>\d+)/$', views.BookDetail.as_view(), name='book_detail'),
     url(r'^cart/$', views.CartDetail.as_view(), name='cart_detail'), # this works
-    # url(r'^add/(?P<book_id>\d+)/$', views.cart_add, name='cart_add'),
     url(r'^add/(?P<book_id>\d+)/$', views.CartAdd.as_view(), name='cart_add'), # does NOT work - API
     url(r'^remove/(?P<book_id>\d+)/$', views.CartRemove.as_view(), name='cart_remove'), # does NOT work - API
     url(r'^create/$', views.OrderCreate.as_view(), name='order_create'), # this works
