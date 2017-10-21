@@ -101,7 +101,7 @@ class CartRemove(APIView):
     template_name = 'cart/detail.html'
 
     def post(self, request, book_id):
-        print ("You are here")
+        # print ("You are here")
         cart = Cart(request)
         book = get_object_or_404(Book, id=book_id)
         cart.remove(book)

@@ -23,7 +23,11 @@
             <tr>
                 <td>
                     <a href="{{ item.book.url }}">
-                        <img src="{% if item.book.cover %}{{ item.book.cover }}{% else %}{% static 'img/no_image.gif' %}{% endif %}">
+                        <img src="{% if item.book.cover %}
+                                      {{ item.book.cover }}
+                                  {% else %}
+                                      {% static 'img/no_image.gif' %}
+                                  {% endif %}">
                     </a>
                 </td>
                 <td>{{ item.book.title }}</td>

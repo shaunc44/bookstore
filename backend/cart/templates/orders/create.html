@@ -11,13 +11,18 @@
         <h3>Your book order</h3>
         <ul>
             {% for item in cart %}
-                <li>{{ item.quantity }} x {{ item.book.title }} <span>${{ item.total_price }}</span></li>
+                <li>{{ item.quantity }} x {{ item.book.title }}<span>${{ item.total_price }}</span></li>
             {% endfor %}
         </ul>
         <p>Total: ${{ total_price }}</p>
     </div>
-    
-    <form action="." class="order-form" method="post" >
+
+    {% comment %}
+        This is where the customer should enter their personal info
+        <form action="." class="order-form" method="post" >
+    {% end comment %}
+
+    <form action="{$ url 'cart:order_create' $}" class="order-form" method="post" >
         {{ form.as_p }}
         <p><input type="submit" value="Place order"></p>
         {% csrf_token %}
