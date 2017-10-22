@@ -32,13 +32,10 @@ class Cart(object):
         for book in books:
             self.cart[str(book.id)]['book'] = create_serializer(book)
 
-        # item['cart_total'] = 0
-
         for item in self.cart.values():
-            # item['price'] = Decimal(item['price'])
-            item['price'] = float(item['price'])
-            item['total_price'] = round(item['price'] * item['quantity'], 2)
-            # item['cart_total'] =+ item['total_price']
+            item['price'] = "%0.2f" % ( (float(item['price'])) )
+            item_pc_for_total_calc = ( float(item['price']) )
+            item['total_price'] = "%0.2f" % ( round(item_pc_for_total_calc * item['quantity'], 2) )
             yield item
 
 
@@ -78,7 +75,7 @@ class Cart(object):
 
 
     def get_total_price(self):
-        return round( sum(float(item['price']) * item['quantity'] for item in self.cart.values()), 2 )
+        return "%0.2f" % ( round( sum(float(item['price']) * item['quantity'] for item in self.cart.values()), 2 ) )
 
 
 

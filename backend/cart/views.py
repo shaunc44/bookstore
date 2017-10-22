@@ -28,8 +28,10 @@ class BookList(APIView):
     template_name = 'book/list.html'
 
     def get(self, request):
+        cart = Cart(request)
         queryset = Book.objects.all()
-        return Response( {'books': queryset} )
+        return Response( {'books': queryset, 
+                         'total_price': cart.get_total_price()} )
 
 
 class BookDetail(APIView):
@@ -113,7 +115,8 @@ class CartRemove(APIView):
             item["book"] = item["book"](request)
 
         return Response( {'book': book.data,
-                          'cart': cart_list } )
+                          'cart': cart_list,
+                          'total_price': cart.get_total_price()} )
 
 
 # ***************************************************************** #
