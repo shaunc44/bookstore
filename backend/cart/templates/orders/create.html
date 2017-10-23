@@ -17,14 +17,28 @@
         <p>Total: ${{ total_price }}</p>
     </div>
 
-    {% comment %}
-        This is where the customer should enter their personal info
-        <form action="." class="order-form" method="post" >
-    {% end comment %}
-
-    <form action="{$ url 'cart:order_create' $}" class="order-form" method="post" >
+    <form action="{% url 'cart:order_create' %}" class="order-form" method="post" >
         {{ form.as_p }}
         <p><input type="submit" value="Place order"></p>
         {% csrf_token %}
     </form>
+
+
 {% endblock %}
+
+
+{% comment %}
+    <form action="." class="order-form" method="post" >
+        {{ form.as_p }}
+        <p><input type="submit" value="Place order"></p>
+        {% csrf_token %}
+    </form>
+{% endcomment %}
+
+
+
+
+{% comment %}
+    This is where the customer should enter their personal info
+    <form action="." class="order-form" method="post" >
+{% endcomment %}

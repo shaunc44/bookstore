@@ -55,6 +55,7 @@ class CartDetail(APIView):
     template_name = 'cart/detail.html'
 
     def get(self, request):
+        # queryset = Book.objects.all()
         cart = Cart(request)
         for item in cart:
             item['update_quantity_form'] = CartAddBookForm(
@@ -68,7 +69,8 @@ class CartDetail(APIView):
         for item in cart_list:
             item["book"] = item["book"](request)
 
-        return Response({'cart': cart_list, 
+        return Response({#'books': queryset,
+                         'cart': cart_list, 
                          'total_price': cart.get_total_price()} )
 
 
@@ -127,17 +129,29 @@ class OrderCreate(APIView):
     renderer_classes = (TemplateHTMLRenderer,)
     template_name = 'orders/create.html'
 
-    # def order_create(self, request):
+
+    def get(self, request):
+        form = OrderCreateForm()
+        # book = get_object_or_404(Book)
+        cart = Cart(request)
+        cart_list = list(cart)
+
+        for item in cart_list:
+            item["book"] = item["book"](request)
+
+        return Response({
+            'form': form,
+            'cart': cart_list,
+            'total_price': cart.get_total_price()
+        })
+
     def post(self, request):
         cart = Cart(request)
         cart_list = list(cart)
-        print ("Cart List:", cart_list)
-        # if request.method == 'POST':
-        # form = OrderCreateForm(request.POST)
-        form = OrderCreateForm()
+        # print ("Cart List:", cart_list)
+        form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
-            # for item in cart:
             for item in cart_list:
                 OrderItem.objects.create(
                     order =    order,
@@ -150,8 +164,39 @@ class OrderCreate(APIView):
             # return render(request,
             #              'orders/created.html', 
             #              {'order': order})
-        return Response({'cart': cart_list,
-                         'order': order})
+        return Response({
+            #'cart': cart_list,
+            'order': order
+        })
+
+
+# class OrderCreated(APIView):
+#     renderer_classes = (TemplateHTMLRenderer,)
+#     template_name = 'orders/created.html'
+#     # def order_create(self, request):
+#     def post(self, request):
+#         cart = Cart(request)
+#         cart_list = list(cart)
+#         # print ("Cart List:", cart_list)
+#         form = OrderCreateForm(request.POST)
+#         if form.is_valid():
+#             order = form.save()
+#             for item in cart_list:
+#                 OrderItem.objects.create(
+#                     order =    order,
+#                     book =     item['book'],
+#                     price =    item['price'],
+#                     quantity = item['quantity']
+#                 )
+#             # clear the cart
+#             cart.clear()
+#             # return render(request,
+#             #              'orders/created.html', 
+#             #              {'order': order})
+#         return Response({
+#             #'cart': cart_list,
+#             'order': order.id
+#         })
         # else:
         #     form = OrderCreateForm()
 
@@ -161,6 +206,11 @@ class OrderCreate(APIView):
         # return Response('orders/create.html', 
         #                {'cart': cart, 
         #                 'form': form})
+
+
+
+
+
 
 
 # class OrderCreated(APIView):

@@ -56,8 +56,30 @@
         </tr>
         </tbody>
     </table>
+
     <p class="text-right">
         <a href="{% url 'cart:book_list' %}" class="button light">Continue shopping</a>
         <a href="{% url 'cart:order_create' %}" class="button">Checkout</a>
     </p>
 {% endblock %}
+
+
+
+
+{% comment %}
+
+    <p class="text-right">
+        <a href="{% url 'cart:book_list' %}" class="button light">Continue shopping</a>
+        <form action="{% url 'cart:order_create' order %}" method="post">
+            <input type="submit" class="button" value="Checkout">Checkout</button>
+            {% csrf_token %}
+        </form>
+    </p>
+{% endcomment %}
+
+
+
+
+
+
+
