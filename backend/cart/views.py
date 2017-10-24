@@ -15,7 +15,7 @@ from rest_framework.renderers import TemplateHTMLRenderer, StaticHTMLRenderer
 # from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
-import json
+# import json
 
 
 # ***************************************************************** #
