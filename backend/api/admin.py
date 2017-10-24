@@ -1,18 +1,10 @@
 from django.contrib import admin
 from django.utils.html import format_html
-
+from django.conf import settings
 from orders.models import Book
 
 
-# Register your models here.
-# class CustomerAdmin(admin.ModelAdmin):
-#     list_display =  ['first_name', 'last_initial', 'email']
-#     list_editable = ['email']
-
-#     class Meta:
-#         model = Customer
-
-# admin.site.register(Customer, CustomerAdmin)
+admin.site.site_header = settings.ADMIN_SITE_HEADER
 
 
 class BookAdmin(admin.ModelAdmin):
