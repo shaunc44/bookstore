@@ -77,6 +77,9 @@ class Cart(object):
     def get_total_price(self):
         return "%0.2f" % ( round( sum(float(item['price']) * item['quantity'] for item in self.cart.values()), 2 ) )
 
+    # def get_total_items(self):
+    #     return 
+
 
 
 

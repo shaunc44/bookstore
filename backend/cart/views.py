@@ -29,12 +29,11 @@ class BookList(APIView):
 
     def get(self, request):
         cart = Cart(request)
-        cart_len = len(cart)
         queryset = Book.objects.all()
 
         return Response({
             'books': queryset, 
-            'cart_len': cart_len,
+            'cart_len': cart.__len__(),
             'total_price': cart.get_total_price()
         })
 
@@ -46,12 +45,11 @@ class BookDetail(APIView):
 
     def get(self, request, id):
         cart = Cart(request)
-        cart_len = len(cart)
         book = get_object_or_404(Book, id=id)
         cart_book_form = CartAddBookForm()
         return Response({ 
             'book': book,
-            'cart_len': cart_len,
+            'cart_len': cart.__len__(),
             'cart_book_form': cart_book_form, 
             'total_price': cart.get_total_price()
         })
@@ -67,7 +65,6 @@ class CartDetail(APIView):
 
     def get(self, request):
         cart = Cart(request)
-        cart_len = len(cart)
 
         for item in cart:
             item['update_quantity_form'] = CartAddBookForm(
@@ -83,7 +80,7 @@ class CartDetail(APIView):
 
         return Response({
             'cart': cart_list,
-            'cart_len': cart_len,
+            'cart_len': cart.__len__(),
             'total_price': cart.get_total_price()
         })
 
@@ -94,7 +91,6 @@ class CartAdd(APIView):
 
     def post(self, request, book_id):
         cart = Cart(request)
-        cart_len = len(cart)
         book = get_object_or_404(Book, id=book_id)
         form = CartAddBookForm(request.POST)
 
@@ -112,7 +108,7 @@ class CartAdd(APIView):
 
         return Response( {'book': book.data,
                           'cart': cart_list,
-                          'cart_len': cart_len,
+                          'cart_len': cart.__len__(),
                           'total_price': cart.get_total_price()} )
 
 
@@ -121,9 +117,7 @@ class CartRemove(APIView):
     template_name = 'cart/detail.html'
 
     def post(self, request, book_id):
-        # print ("You are here")
         cart = Cart(request)
-        cart_len = len(cart)
         book = get_object_or_404(Book, id=book_id)
         cart.remove(book)
 
@@ -135,7 +129,7 @@ class CartRemove(APIView):
 
         return Response( {'book': book.data,
                           'cart': cart_list,
-                          'cart_len': cart_len,
+                          'cart_len': cart.__len__(),
                           'total_price': cart.get_total_price()} )
 
 
@@ -150,9 +144,7 @@ class OrderCreate(APIView):
 
     def get(self, request):
         form = OrderCreateForm()
-        # book = get_object_or_404(Book)
         cart = Cart(request)
-        cart_len = len(cart)
         cart_list = list(cart)
 
         for item in cart_list:
@@ -161,7 +153,7 @@ class OrderCreate(APIView):
         return Response({
             'form': form,
             'cart': cart_list,
-            'cart_len': cart_len,
+            'cart_len': cart.__len__(),
             'total_price': cart.get_total_price()
         })
 
