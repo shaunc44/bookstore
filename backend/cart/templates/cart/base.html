@@ -32,3 +32,32 @@
 </body>
 </html>
 
+
+
+
+{% comment %}
+
+            {% with total_items=cart|length %}
+                {% if cart|length > 0 %}
+                    Your cart:
+                    <a href="{% url 'cart:cart_detail' %}">
+                        {{ total_items }} item{{ total_items|pluralize }}, ${{ total_price }}
+                    </a>
+                {% else %}
+                    Your cart is empty.
+                {% endif %}
+            {% endwith %}
+
+
+            {% with item_count=total_items %}
+                {% if total_items > 0 %}
+                    Your cart:
+                    <a href="{% url 'cart:cart_detail' %}">
+                        {{ item_count }} item{{ item_count|pluralize }}, ${{ total_price }}
+                    </a>
+                {% else %}
+                    Your cart is empty.
+                {% endif %}
+            {% endwith %}
+
+{% endcomment %}

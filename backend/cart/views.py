@@ -65,13 +65,26 @@ class CartDetail(APIView):
                 }
             )
         cart_list = list(cart)
+        # print ("Cart length: ", len(cart_list))
+        # print ("Cart: ", cart_list[0]["quantity"])
+        cart_len = len(cart_list)
+
+        total_items = 0
+        for x in range(cart_len):
+            total_items += cart_list[x]["quantity"]
 
         for item in cart_list:
             item["book"] = item["book"](request)
 
-        return Response({#'books': queryset,
-                         'cart': cart_list, 
-                         'total_price': cart.get_total_price()} )
+        # print ("Totalitems: ", total_items)
+        # print ("Totalitems Type: ", type(total_items))
+
+        return Response({
+            #'total_items': str(total_items),
+            'cart': len(cart_list), 
+            # 'cart': total_items,
+            'total_price': cart.get_total_price()
+        })
 
 
 class CartAdd(APIView):
