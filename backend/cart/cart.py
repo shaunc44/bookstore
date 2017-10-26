@@ -1,4 +1,3 @@
-# from decimal import Decimal
 from django.conf import settings
 from orders.models import Book
 
@@ -50,7 +49,10 @@ class Cart(object):
             self.cart[book_id]['quantity'] = quantity
         else:
             self.cart[book_id]['quantity'] += quantity
+
+        # quant = self.cart[book_id]['quantity']
         self.save()
+        # return self.cart[book_id]['quantity']
 
 
     def remove(self, book):
@@ -66,6 +68,8 @@ class Cart(object):
         self.session[settings.CART_SESSION_ID] = self.cart
         # mark the session as "modified" to make sure it is saved
         self.session.modified = True
+        # return self.cart[book_id]['quantity']
+        # return quant
 
 
     def clear(self):
@@ -76,9 +80,6 @@ class Cart(object):
 
     def get_total_price(self):
         return "%0.2f" % ( round( sum(float(item['price']) * item['quantity'] for item in self.cart.values()), 2 ) )
-
-    # def get_total_items(self):
-    #     return 
 
 
 

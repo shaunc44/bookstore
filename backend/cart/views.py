@@ -15,7 +15,8 @@ from rest_framework.renderers import TemplateHTMLRenderer, StaticHTMLRenderer
 # from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
-# import json
+from django.http import HttpResponseRedirect
+
 
 
 # ***************************************************************** #
@@ -47,6 +48,7 @@ class BookDetail(APIView):
         cart = Cart(request)
         book = get_object_or_404(Book, id=id)
         cart_book_form = CartAddBookForm()
+
         return Response({ 
             'book': book,
             'cart_len': cart.__len__(),
@@ -65,18 +67,16 @@ class CartDetail(APIView):
 
     def get(self, request):
         cart = Cart(request)
-
-        for item in cart:
-            item['update_quantity_form'] = CartAddBookForm(
-                initial={
-                    'quantity': item['quantity'],
-                    'update':   True
-                }
-            )
         cart_list = list(cart)
 
         for item in cart_list:
             item["book"] = item["book"](request)
+            item['update_quantity_form'] = [field.as_widget() for field in CartAddBookForm(
+                initial={
+                    'quantity': item['quantity'],
+                    'update':   True
+                }
+            )]
 
         return Response({
             'cart': cart_list,
@@ -101,15 +101,23 @@ class CartAdd(APIView):
                      update_quantity =  cd['update'])
 
         book = BookSerializer(book, context=dict(request=request))
-        cart_list = list(cart)
 
+        cart_list = list(cart)
         for item in cart_list:
             item["book"] = item["book"](request)
+            item['update_quantity_form'] = [field.as_widget() for field in CartAddBookForm(
+                initial={
+                    'quantity': item['quantity'],
+                    'update':   True
+                }
+            )]
 
-        return Response( {'book': book.data,
-                          'cart': cart_list,
-                          'cart_len': cart.__len__(),
-                          'total_price': cart.get_total_price()} )
+        return Response({
+            'book': book.data,
+            'cart': cart_list,
+            'cart_len': cart.__len__(),
+            'total_price': cart.get_total_price(),
+        })
 
 
 class CartRemove(APIView):
@@ -126,11 +134,19 @@ class CartRemove(APIView):
 
         for item in cart_list:
             item["book"] = item["book"](request)
+            item['update_quantity_form'] = [field.as_widget() for field in CartAddBookForm(
+                initial={
+                    'quantity': item['quantity'],
+                    'update':   True
+                }
+            )]
 
-        return Response( {'book': book.data,
-                          'cart': cart_list,
-                          'cart_len': cart.__len__(),
-                          'total_price': cart.get_total_price()} )
+        return Response({
+            'book': book.data,
+            'cart': cart_list,
+            'cart_len': cart.__len__(),
+            'total_price': cart.get_total_price()
+        })
 
 
 # ***************************************************************** #
@@ -164,6 +180,8 @@ class OrderCreate(APIView):
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
+            # order.user = request.User
+            # order.save()
             for item in cart_list:
                 OrderItem.objects.create(
                     order =    order,
@@ -173,11 +191,8 @@ class OrderCreate(APIView):
                 )
             # clear the cart
             cart.clear()
-            # return render(request,
-            #              'orders/created.html', 
-            #              {'order': order})
+
         return Response({
-            #'cart': cart_list,
             'order': order
         })
 

@@ -33,8 +33,9 @@
                 <td>{{ item.book.title }}</td>
                 <td>
                     <form action="{% url 'cart:cart_add' item.book.id %}" method="post">
-                        {{ item.update_quantity_form.quantity }}
-                        {{ item.update_quantity_form.update }}
+                        {% for field in item.update_quantity_form %}
+                            {{ field }}
+                        {% endfor %}
                         <input type="submit" value="Update">
                         {% csrf_token %}
                     </form>
