@@ -7,6 +7,7 @@ class Cart(object):
 
     def __init__(self, request):
         # Initialize the cart.
+        self.request = request
         self.session = request.session
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
@@ -24,12 +25,11 @@ class Cart(object):
         # Iterate over the items in the cart and get the products from the database.
         book_ids = self.cart.keys()
         # get the book objects and add them to the cart
-        def create_serializer(book):
-            return lambda req: BookSerializer(book, context=dict(request=req)).data
-        
         books = Book.objects.filter(id__in=book_ids)
         for book in books:
-            self.cart[str(book.id)]['book'] = create_serializer(book)
+            self.cart[str(book.id)]['book'] = BookSerializer(
+                                                book, 
+                                                context=dict(request=self.request)).data
 
         for item in self.cart.values():
             item['price'] = "%0.2f" % ( (float(item['price'])) )
@@ -50,9 +50,7 @@ class Cart(object):
         else:
             self.cart[book_id]['quantity'] += quantity
 
-        # quant = self.cart[book_id]['quantity']
         self.save()
-        # return self.cart[book_id]['quantity']
 
 
     def remove(self, book):
@@ -68,8 +66,6 @@ class Cart(object):
         self.session[settings.CART_SESSION_ID] = self.cart
         # mark the session as "modified" to make sure it is saved
         self.session.modified = True
-        # return self.cart[book_id]['quantity']
-        # return quant
 
 
     def clear(self):

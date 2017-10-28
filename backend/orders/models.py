@@ -38,7 +38,7 @@ class Order(models.Model):
     created =       models.DateTimeField(auto_now_add=True)
     updated =       models.DateTimeField(auto_now=True)
     paid =          models.BooleanField(default=False)
-    customer =      models.ForeignKey(User)
+    customer =      models.ForeignKey(User, null=True, blank=True)
 
     class Meta:
         ordering = ('-created',)

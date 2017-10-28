@@ -70,7 +70,6 @@ class CartDetail(APIView):
         cart_list = list(cart)
 
         for item in cart_list:
-            item["book"] = item["book"](request)
             item['update_quantity_form'] = [field.as_widget() for field in CartAddBookForm(
                 initial={
                     'quantity': item['quantity'],
@@ -104,7 +103,6 @@ class CartAdd(APIView):
 
         cart_list = list(cart)
         for item in cart_list:
-            item["book"] = item["book"](request)
             item['update_quantity_form'] = [field.as_widget() for field in CartAddBookForm(
                 initial={
                     'quantity': item['quantity'],
@@ -133,7 +131,6 @@ class CartRemove(APIView):
         cart_list = list(cart)
 
         for item in cart_list:
-            item["book"] = item["book"](request)
             item['update_quantity_form'] = [field.as_widget() for field in CartAddBookForm(
                 initial={
                     'quantity': item['quantity'],
@@ -157,15 +154,12 @@ class OrderCreate(APIView):
     renderer_classes = (TemplateHTMLRenderer,)
     template_name = 'orders/create.html'
 
-
     def get(self, request):
         form = OrderCreateForm()
         cart = Cart(request)
         cart_list = list(cart)
 
-        for item in cart_list:
-            item["book"] = item["book"](request)
-
+        # for item in cart_list:
         return Response({
             'form': form,
             'cart': cart_list,
@@ -177,18 +171,25 @@ class OrderCreate(APIView):
         cart = Cart(request)
         cart_list = list(cart)
         # print ("Cart List:", cart_list)
+
+        # form = OrderCreateForm(request.POST, instance=profile)
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
             # order.user = request.User
             # order.save()
+
+            # OrderItem.objects.bulk_create([OrderItem(item) for item in cart_list])
+
             for item in cart_list:
-                OrderItem.objects.create(
-                    order =    order,
-                    book =     item['book'],
-                    price =    item['price'],
-                    quantity = item['quantity']
-                )
+                # Here use bulk_create to get the book id *********
+                OrderItem.objects.bulk_create([
+                    OrderItem(order = order),
+                    OrderItem(book = item['book']),
+                    OrderItem(price = item['price']),
+                    OrderItem(quantity = item['quantity'])
+                ])
+
             # clear the cart
             cart.clear()
 
