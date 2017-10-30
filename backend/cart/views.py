@@ -169,25 +169,27 @@ class OrderCreate(APIView):
 
     def post(self, request):
         cart = Cart(request)
+        print ("Cart:", cart)
+
         cart_list = list(cart)
-        # print ("Cart List:", cart_list)
+        print ("Cart List:", cart_list)
 
         # form = OrderCreateForm(request.POST, instance=profile)
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
-            # order.user = request.User
-            # order.save()
-
-            # OrderItem.objects.bulk_create([OrderItem(item) for item in cart_list])
 
             for item in cart_list:
-                # Here use bulk_create to get the book id *********
+                print ("\nItem:", item, "\n")
                 OrderItem.objects.bulk_create([
-                    OrderItem(order = order),
-                    OrderItem(book = item['book']),
-                    OrderItem(price = item['price']),
-                    OrderItem(quantity = item['quantity'])
+                    OrderItem(
+                        order = order,
+                        # book = get_object_or_404(Book, id=item['book']['id']),
+                        book = item['book'],
+                        price = item['total_price'],
+                        quantity = item['quantity']
+                    )
+                    # for item in cart_list
                 ])
 
             # clear the cart
@@ -196,6 +198,15 @@ class OrderCreate(APIView):
         return Response({
             'order': order
         })
+
+
+
+
+
+
+
+
+
 
 
 # class OrderCreated(APIView):
