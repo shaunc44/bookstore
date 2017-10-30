@@ -10,7 +10,7 @@ from cart.serializers import BookSerializer, OrderSerializer, OrderItemSerialize
 # from cart.permissions import IsOwnerOrReadOnly
 from rest_framework import permissions, renderers, viewsets
 from rest_framework.decorators import api_view, detail_route, list_route
-from rest_framework.response import Response
+from rest_framework.response import Response, HttpResponse
 from rest_framework.renderers import TemplateHTMLRenderer, StaticHTMLRenderer
 # from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
@@ -155,6 +155,9 @@ class OrderCreate(APIView):
     template_name = 'orders/create.html'
 
     def get(self, request):
+        # renderer_classes = (TemplateHTMLRenderer,)
+        # template_name = 'orders/create.html'
+
         form = OrderCreateForm()
         cart = Cart(request)
         cart_list = list(cart)
@@ -167,12 +170,15 @@ class OrderCreate(APIView):
             'total_price': cart.get_total_price()
         })
 
+# Try to make this a different view class, add url orderCreated ... *******
     def post(self, request):
-        cart = Cart(request)
-        print ("Cart:", cart)
+        # renderer_classes = (TemplateHTMLRenderer,)
+        # template_name = 'orders/created.html'
 
+        cart = Cart(request)
+        # print ("Cart:", cart)
         cart_list = list(cart)
-        print ("Cart List:", cart_list)
+        # print ("Cart List:", cart_list)
 
         # form = OrderCreateForm(request.POST, instance=profile)
         form = OrderCreateForm(request.POST)
@@ -184,8 +190,8 @@ class OrderCreate(APIView):
                 OrderItem.objects.bulk_create([
                     OrderItem(
                         order = order,
-                        # book = get_object_or_404(Book, id=item['book']['id']),
-                        book = item['book'],
+                        book = get_object_or_404(Book, id=item['book']['id']),
+                        # book = item['book'],
                         price = item['total_price'],
                         quantity = item['quantity']
                     )
@@ -196,12 +202,28 @@ class OrderCreate(APIView):
             cart.clear()
 
         return Response({
-            'order': order
+            'order': order,
+            # 'orders/created.html'
         })
 
 
 
+# class OrderCreated(APIView):
+#     # This viewset automatically provides `list` and `detail` actions.
+#     renderer_classes = (TemplateHTMLRenderer,)
+#     template_name = 'orders/created.html'
 
+#     def get(self, request):
+#         order = Order(request)
+#         # cart = Cart(request)
+#         # queryset = Book.objects.all()
+
+#         return Response({
+#             'order': order.id
+#             # 'books': queryset, 
+#             # 'cart_len': cart.__len__(),
+#             # 'total_price': cart.get_total_price()
+#         })
 
 
 
