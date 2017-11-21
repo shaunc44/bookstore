@@ -167,40 +167,40 @@ class OrderCreate(APIView):
         })
 
 
-class OrderCreated(APIView):
-    renderer_classes = (TemplateHTMLRenderer,)
-    template_name = 'orders/created.html'
+# class OrderCreated(APIView):
+#     renderer_classes = (TemplateHTMLRenderer,)
+#     template_name = 'orders/created.html'
 
-    def post(self, request):
-        cart = Cart(request)
-        # print ("Cart:", cart)
-        cart_list = list(cart)
-        # print ("Cart List:", cart_list)
+    # def get(self, request):
+    # # def post(self, request):
+    #     cart = Cart(request)
+    #     # print ("Cart:", cart)
+    #     cart_list = list(cart)
+    #     # print ("Cart List:", cart_list)
 
-        # form = OrderCreateForm(request.POST, instance=profile)
-        form = OrderCreateForm(request.POST)
-        if form.is_valid():
-            order = form.save()
+    #     # form = OrderCreateForm(request.POST, instance=profile)
+    #     form = OrderCreateForm(request.POST)
+    #     if form.is_valid():
+    #         order = form.save()
 
-            for item in cart_list:
-                # print ("\nItem:", item, "\n")
-                OrderItem.objects.bulk_create([
-                    OrderItem(
-                        order = order,
-                        book = get_object_or_404(Book, id=item['book']['id']),
-                        # book = item['book'],
-                        price = item['total_price'],
-                        quantity = item['quantity']
-                    )
-                    # for item in cart_list
-                ])
+    #         for item in cart_list:
+    #             # print ("\nItem:", item, "\n")
+    #             OrderItem.objects.bulk_create([
+    #                 OrderItem(
+    #                     order = order,
+    #                     # book = get_object_or_404(Book, id=item['book']['id']),
+    #                     # book = item['book'],
+    #                     # price = item['total_price'],
+    #                     # quantity = item['quantity']
+    #                 )
+    #             ])
 
-            # clear the cart
-            cart.clear()
+    #         # clear the cart
+    #         cart.clear()
 
-        return Response({
-            'order': order,
-        })
+    #     return Response({
+    #         'order': order.id,
+    #     })
 
 
 # This worked before but did not direct to checkout thank you confirmation page

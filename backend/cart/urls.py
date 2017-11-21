@@ -15,8 +15,8 @@ urlpatterns = [
     url(r'^add/(?P<book_id>\d+)/$', views.CartAdd.as_view(), name='cart_add'),
     url(r'^remove/(?P<book_id>\d+)/$', views.CartRemove.as_view(), name='cart_remove'),
     url(r'^order/$', views.OrderCreate.as_view(), name='order_create'),
-    url(r'^order_created/$', views.OrderCreated.as_view(), name='order_created'),
-    # url(r'^order/(?P<id>\d+)/$', views.OrderCreated.as_view(), name='order_created'),
+    # url(r'^order_created/$', views.OrderCreated.as_view(), name='order_created'),
+    url(r'^order/(?P<id>\d+)/$', views.OrderCreated.as_view(), name='order_created'),
     # url(r'^order/(?P<id>\d+)/$', views.OrderCreated.as_view(), name='order_created'),
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
